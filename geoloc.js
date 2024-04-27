@@ -20,6 +20,12 @@ function updateDistanceDisplay() {
   distanceElement.textContent = "Distance cumulée : " + cumulativeDistance.toFixed(2) + " mètres";
 }
 
+// Fonction pour mettre à jour l'affichage de la position
+function updatePositionDisplay(latitude, longitude) {
+  var positionElement = document.getElementById("position");
+  positionElement.textContent = "Position : Latitude " + latitude.toFixed(6) + ", Longitude " + longitude.toFixed(6);
+}
+
 // Fonction pour récupérer la position toutes les secondes
 function getPosition() {
   if ("geolocation" in navigator) {
@@ -39,6 +45,9 @@ function getPosition() {
         // Mettre à jour la position précédente avec la position actuelle
         previousPosition = {latitude: currentLatitude, longitude: currentLongitude};
       }
+
+      // Mettre à jour l'affichage de la position
+      updatePositionDisplay(currentLatitude, currentLongitude);
     }, function(error) {
       console.error("Erreur de géolocalisation : ", error);
     });
@@ -48,4 +57,4 @@ function getPosition() {
 }
 
 // Récupérer la position toutes les secondes
-setInterval(getPosition, 1000); // 1000 ms = 1 seconde
+setInterval(getPosition, 5000); // 1000 ms = 1 seconde
