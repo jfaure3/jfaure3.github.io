@@ -21,8 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fonction pour jouer audio1
         function playAudio1() {
             playButton.textContent = "Inspirer";
+            audio2.pause();
+            audio2.currentTime = 0;
             audio1.play();
-            setTimeout(playSilence1, audio1Duration); // Jouer le silence après audio1
+            setTimeout((silence1Duration == 0) ? playAudio2 : playSilence1, audio1Duration); // Jouer le silence après audio1
         }
 
         // Fonction pour jouer le silence après audio1
@@ -36,8 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fonction pour jouer audio2
         function playAudio2() {
             playButton.textContent = "exprirer";
+            audio1.pause();
+            audio1.currentTime = 0;
             audio2.play();
-            setTimeout(playSilence2, audio2Duration); // Jouer le silence après audio2
+            setTimeout((silence2Duration == 0) ? playAudio1 : playSilence2, audio2Duration); // Jouer le silence après audio1
         }
 
         // Fonction pour jouer le silence après audio2
@@ -60,21 +64,5 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, totalTime);
 
-
-        // while 
-        // // Jouer le premier son pendant 5 secondes
-        // audio1.play();
-        // setTimeout(function() {
-        //     audio1.pause();
-        //     audio1.currentTime = 0;
-        //     // Jouer le deuxième son après 5 secondes
-        //     audio2.play();
-        // }, 5000); // 5000 millisecondes = 5 secondes
-
-        // // Arrêter le deuxième son après 8 secondes
-        // setTimeout(function() {
-        //     audio2.pause();
-        //     audio2.currentTime = 0;
-        // }, 13000); // 13000 millisecondes = 5 secondes du premier son + 8 secondes du deuxième son
     });
 });
