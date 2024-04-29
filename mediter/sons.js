@@ -14,19 +14,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         console.log(selectedValues);
         // Définir les durées de lecture des sons et des silences
-        const audio1Duration = 1000 * parseInt(selectedValues[0]); 
-        const silence1Duration = 1000 * parseInt(selectedValues[1]);
-        const audio2Duration = 1000 * parseInt(selectedValues[2]);
-        const silence2Duration = 1000 * parseInt(selectedValues[3]);
-        const totalTime = audio1Duration+audio2Duration+silence1Duration+silence2Duration; // 5 minutes en millisecondes
-        const nbCycles = 5*60*1000/totalTime;
+        const temps = 60*parseInt(selectedValues[0]);
+        const audio1Duration = parseInt(selectedValues[1]); 
+        const silence1Duration = parseInt(selectedValues[2]);
+        const audio2Duration = parseInt(selectedValues[3]);
+        const silence2Duration = parseInt(selectedValues[4]);
+        const periode = audio1Duration+audio2Duration+silence1Duration+silence2Duration;
+        const nbCycles = temps/periode;
         // Fonction pour jouer audio1
         function playAudio1() {
             playButton.textContent = "Inspirer";
             audio2.pause();
             audio2.currentTime = 0;
             audio1.play();
-            setTimeout((silence1Duration == 0) ? playAudio2 : playSilence1, audio1Duration); // Jouer le silence après audio1
+            setTimeout((silence1Duration == 0) ? playAudio2 : playSilence1, audio1Duration*1000); // Jouer le silence après audio1
         }
 
         // Fonction pour jouer le silence après audio1
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             playButton.textContent = "bloquer";
             audio1.pause();
             audio1.currentTime = 0;
-            setTimeout(playAudio2, silence1Duration); // Jouer audio2 après le silence
+            setTimeout(playAudio2, silence1Duration*1000); // Jouer audio2 après le silence
         }
 
         // Fonction pour jouer audio2
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             audio1.currentTime = 0;
             audio2.play();
             if (silence1Duration != 0){
-                setTimeout(playSilence2, audio2Duration); // Jouer le silence après audio1
+                setTimeout(playSilence2, audio2Duration*1000); // Jouer le silence après audio1
             }
         }
 
@@ -56,32 +57,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Jouer le cycle audio toutes les n minutes
-        let compteur = 0;
+        let compteur = 1;
         playAudio1();
-        const intervalId = setInterval(() => {
-            if (compteur > nbCycles){
-                clearInterval(intervalId);
+        const intervalGeneral = setInterval(() => {
+            if (compteur > nbCycles-1){
+                clearInterval(intervalGeneral);
+                clearInterval(intervalClock);
             }
             else{
                 compteur++;
                 console.log(compteur+"/"+nbCycles);
                 playAudio1(); // Commencer le cycle avec audio1   
             }
-        }, totalTime);
+        }, periode*1000);
     const depart = new Date();
     function updateClock() {
         var now = new Date();
-        const seconde = Math.floor((now.getTime()-depart.getTime())/1000);
+        const seconde = Math.floor(temps-(now.getTime()-depart.getTime())/1000);
         const minutes = String(Math.floor(seconde/60)).padStart(2, '0');
         const seconds = String(seconde%60).padStart(2, '0');
         const timeString = minutes + ':' + seconds;
     
         document.getElementById('clock').textContent = timeString;
-        document.getElementById('progression').style.width = String(seconde/5/60*100)+"%";
+        document.getElementById('progression').style.width = String((1-seconde/temps)*100)+"%";
     }
     
     // Mettre à jour l'horloge toutes les secondes
-    setInterval(updateClock, 1000);
+    const intervalClock = setInterval(updateClock, 1000);
 
     });
 
