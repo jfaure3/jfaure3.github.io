@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const timeString = minutes + ':' + seconds;
     
         document.getElementById('clock').textContent = timeString;
+        document.getElementById('progression').style.width = String(seconde/5/60*100)+"%";
     }
     
     // Mettre à jour l'horloge toutes les secondes
