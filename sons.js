@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const audio2Duration = 1000 * parseInt(selectedValues[2]);
         const silence2Duration = 1000 * parseInt(selectedValues[3]);
         const totalTime = audio1Duration+audio2Duration+silence1Duration+silence2Duration; // 5 minutes en millisecondes
-        const nbCycles = 1.5*60*1000/totalTime;
+        const nbCycles = 5*60*1000/totalTime;
         // Fonction pour jouer audio1
         function playAudio1() {
             playButton.textContent = "Inspirer";
